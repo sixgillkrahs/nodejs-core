@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model policy_permission {
+  id           String   @id @default(uuid())
+  permissionId String
+  policyId     String
+  createdAt    DateTime
+  updatedAt    DateTime
+  createdBy    String?
+  updatedBy    String?
+
+  policy     policy    @relation(fields: [policyId], references: [id])
+  permisson  permisson @relation(fields: [permissionId], references: [id])
+}
+
+model passwordHistory {
+  id         String   @id @default(uuid())
+  userAuthId String
+  password   String
+  createAt   DateTime
+
+  userAuth userAuth @relation(fields: [userAuthId], references: [id])
+
+  @@index([userAuthId, id], name: "passwordHistory_index_0")
+}
+
+model user {
+  id        String   @id @default(uuid())
+  firstname String
+  lastname  String
+  phone     String
+  email     String
+  isActive  Boolean  @default(true)
+  isDeleted Boolean  @default(false)
+  image     String?
+  createAt  DateTime
+  updatedAt DateTime
+
+  userAuths userAuth[]
+}
+
+model userAuth {
+  id        String   @id @default(uuid())
+  userId    String
+  username  String
+  password  String
+  createAt  DateTime
+  updatedAt DateTime
+  roleId    String
+
+  user user @relation(fields: [userId], references: [id])
+  role role @relation(fields: [roleId], references: [id])
+
+  passwordHistories passwordHistory[]
+}
+
+model role {
+  id        String   @id @default(uuid())
+  name      String?
+  isActive  Boolean
+  createdAt DateTime
+  createdBy String?
+  updatedAt DateTime
+  updatedBy String?
+
+  userAuths   userAuth[]
+  rolePolicies role_policy[]
+}
+
+model resouces {
+  id        String   @id @default(uuid())
+  name      String
+  createdAr DateTime
+  updatedAt DateTime
+  description String?
+  updatedBy  String?
+  createdBy  String?
+
+  permissons permisson[]
+}
+
+model permisson {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActice    Boolean
+  resourceId  String
+  operationId Int?
+
+  resouces  resouces  @relation(fields: [resourceId], references: [id])
+  operation operation? @relation(fields: [operationId], references: [id])
+
+  policy_permissions policy_permission[]
+}
+
+model operation {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime
+  createdBy String?
+  updatedBy String?
+  updatedAt DateTime
+  description String?
+
+  permissons permisson[]
+}
+
+model policy {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime
+  createdBy String?
+  updatedAt DateTime
+  updatedBy String?
+  isActive  Boolean
+
+  policy_permissions policy_permission[]
+  role_policies      role_policy[]
+}
+
+model role_policy {
+  id        String   @id @default(uuid())
+  roleId    String
+  policyId  String
+  isActive  Boolean
+  createdAt DateTime
+  createdBy String?
+  updatedAt DateTime
+  updatedBy String?
+
+  role   role   @relation(fields: [roleId], references: [id])
+  policy policy @relation(fields: [policyId], references: [id])
+}
