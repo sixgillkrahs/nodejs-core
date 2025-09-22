@@ -50,5 +50,4 @@ const userController = new UserController(userService);
  *         description: Forbidden - Admin only
  */
 router.post("/", validateRequest(createUserSchema), userController.createUser);
-
 export default router;

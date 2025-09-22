@@ -37,6 +37,7 @@ export class PermissionController extends BaseController {
                         id: true,
                         name: true,
                         description: true,
+                        isActive: true,
                     }
                 );
                 return permission;
@@ -55,6 +56,7 @@ export class PermissionController extends BaseController {
                     id: true,
                     name: true,
                     description: true,
+                    isActive: true,
                     resources: {
                         select: {
                             name: true,
@@ -152,6 +154,19 @@ export class PermissionController extends BaseController {
                 return permission;
             } catch (error) {
                 logger.error('Error in updatePermission', error);
+                throw error;
+            }
+        });
+    }
+
+    deletePermission = async (req: Request, res: Response, next: NextFunction) => {
+        this.handleRequest(req, res, next, async () => {
+            try {
+                const { id } = req.params;
+                await this.permissionService.deletePermission(id);
+                return { message: 'Permission deleted successfully' };
+            } catch (error) {
+                logger.error('Error in deletePermission', error);
                 throw error;
             }
         });

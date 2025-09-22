@@ -22,8 +22,8 @@ model policy_permission {
   createdBy    String?
   updatedBy    String?
 
-  policy     policy    @relation(fields: [policyId], references: [id])
-  permission  permission @relation(fields: [permissionId], references: [id])
+  policy     policy     @relation(fields: [policyId], references: [id])
+  permission permission @relation(fields: [permissionId], references: [id])
 }
 
 model passwordHistory {
@@ -41,24 +41,24 @@ model user {
   id        String   @id @default(uuid())
   firstName String
   lastName  String
-  phone     String
-  email     String
+  phone     String   
+  email     String   @unique
   isActive  Boolean  @default(true)
   isDeleted Boolean  @default(false)
   image     String?
-  createAt  DateTime
-  updatedAt DateTime
+  createAt  DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   userAuths userAuth[]
 }
 
 model userAuth {
   id        String   @id @default(uuid())
-  userId    String
-  username  String
+  userId    String   
+  username  String   @unique
   password  String
-  createAt  DateTime
-  updatedAt DateTime
+  createAt  DateTime @default(now())
+  updatedAt DateTime @default(now())
   roleId    String
 
   user user @relation(fields: [userId], references: [id])
@@ -69,50 +69,54 @@ model userAuth {
 
 model role {
   id        String   @id @default(uuid())
-  name      String?
+  name      String?  @unique
   isActive  Boolean
-  createdAt DateTime
+  createdAt DateTime @default(now())
   createdBy String?
-  updatedAt DateTime
+  updatedAt DateTime @default(now())
   updatedBy String?
 
-  userAuths   userAuth[]
+  userAuths    userAuth[]
   rolePolicies role_policy[]
 }
 
 model resources {
-  id        String   @id @default(uuid())
-  name      String
-  createdAr DateTime
-  updatedAt DateTime
+  id          String   @id @default(uuid())
+  name        String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
   description String?
-  updatedBy  String?
-  createdBy  String?
+  updatedBy   String?
+  createdBy   String?
 
   permissions permission[]
 }
 
 model permission {
-  id          String   @id @default(uuid())
-  name        String
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String?
   isActive    Boolean
   resourceId  String
   operationId Int?
 
-  resources  resources  @relation(fields: [resourceId], references: [id])
+  resources resources  @relation(fields: [resourceId], references: [id])
   operation operation? @relation(fields: [operationId], references: [id])
 
   policy_permissions policy_permission[]
+  createdAt   DateTime @default(now())
+  createdBy   String?
+  updatedBy   String?
+  updatedAt   DateTime @default(now())
 }
 
 model operation {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime
-  createdBy String?
-  updatedBy String?
-  updatedAt DateTime
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  createdAt   DateTime @default(now())
+  createdBy   String?
+  updatedBy   String?
+  updatedAt   DateTime @default(now())
   description String?
 
   permissions permission[]
@@ -120,12 +124,12 @@ model operation {
 
 model policy {
   id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime
+  name      String   @unique
+  createdAt DateTime @default(now())
   createdBy String?
-  updatedAt DateTime
+  updatedAt DateTime @default(now())
   updatedBy String?
-  isActive  Boolean
+  isActive  Boolean  @default(true)
 
   policy_permissions policy_permission[]
   role_policies      role_policy[]
@@ -135,10 +139,10 @@ model role_policy {
   id        String   @id @default(uuid())
   roleId    String
   policyId  String
-  isActive  Boolean
-  createdAt DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
   createdBy String?
-  updatedAt DateTime
+  updatedAt DateTime @default(now())
   updatedBy String?
 
   role   role   @relation(fields: [roleId], references: [id])

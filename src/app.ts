@@ -16,6 +16,7 @@ import { cache } from "./middleware/cacheMiddleware";
 import { notFoundHandler } from "./middleware/notFound";
 import userRoutes from '@/routes/user.routes'
 import permissionRoutes from "./routes/permission.routes";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
 
@@ -52,6 +53,9 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/hero", heroRoutes)
 
 const swaggerOptions = {
     explorer: true,
@@ -65,14 +69,13 @@ const swaggerOptions = {
         tryItOutEnabled: true
     },
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: "Express TypeScript API Documentation"
+    customSiteTitle: "Express TypeScript Core"
 };
 
 app.use("/api/monitoring", monitoringRoutes);
 
 app.use('/api-docs', swaggerUi.serve);
 app.get('/api-docs', swaggerUi.setup(specs, swaggerOptions));
-console.log(app._router?.stack);
 
 const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
     return errorHandler(err, req, res, next);
@@ -80,9 +83,7 @@ const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
 app.use(errorMiddleware);
 app.use("/api/users", cache({ duration: 300 }));
-app.use("/api/hero", heroRoutes)
 app.use("/monitoring", monitoringRoutes);
-app.use("/api/permissions", permissionRoutes);
 // Add this as the last middleware (before error handler)
 app.use(notFoundHandler);
 

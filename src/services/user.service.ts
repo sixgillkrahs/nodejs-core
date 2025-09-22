@@ -18,4 +18,21 @@ export class UserService {
             select: select
         })
     }
+
+    getUserByEmail = async (email: string) => {
+        return this.prisma.user.findFirst({
+            where: {
+                email
+            },
+        })
+    }
+
+    getUserById = async (id: string, select?: Prisma.userSelect) => {
+        return this.prisma.user.findFirst({
+            where: {
+                id
+            },
+            select: select
+        })
+    }
 }

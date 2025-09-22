@@ -4,7 +4,7 @@ import { AppError } from "@/utils/appError";
 import { ErrorCode } from "@/utils/errorCodes";
 import { logger } from "@/config/logger";
 import { ENV } from "@/config/env";
-
+import { parse } from "cookie";
 
 interface JwtPayload {
     userId: string;
@@ -27,11 +27,21 @@ export const requireAuth = (
     next: NextFunction
 ): void => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const cookieHeader = req.headers.cookie;
+        if (!cookieHeader) {
+            throw new AppError(
+                "Unauthorized - Invalid token",
+                401,
+                ErrorCode.INVALID_TOKEN
+            );
+        }
+        const cookies = parse(cookieHeader);
+        const token = cookies.accessToken;
         if (!token) {
             throw new AppError("No token provided", 401, ErrorCode.UNAUTHORIZED);
         }
         try {
+            console.log(ENV.JWT_SECRET)
             const decoded = jwt.verify(token, ENV.JWT_SECRET) as JwtPayload;
             req.user = decoded;
             next();

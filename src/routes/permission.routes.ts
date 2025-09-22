@@ -3,7 +3,7 @@ import { PermissionController } from "@/controllers/permission.controller";
 import { PermissionService } from "@/services/permission.service";
 import { requireAuth } from "@/middleware/authMiddleware";
 import { validateRequest } from "@/middleware/validateRequest";
-import { createPermissionSchema, getPermissionByIdSchema, updatePermissionSchema } from "@/validators/permission.validator";
+import { createPermissionSchema, deletePermissionSchema, getPermissionByIdSchema, updatePermissionSchema } from "@/validators/permission.validator";
 import { OperationService } from "@/services/operation.service";
 import { ResourcesService } from "@/services/resources.service";
 
@@ -12,6 +12,35 @@ const permissionService = new PermissionService();
 const operationService = new OperationService();
 const resourcesService = new ResourcesService();
 const permissionController = new PermissionController(permissionService, operationService, resourcesService);
+
+
+router.use(requireAuth);
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Permission:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         resourceId:
+ *           type: string
+ *         operationId:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
 
 
 /**
@@ -192,5 +221,26 @@ router.post("/", validateRequest((lang) => createPermissionSchema(lang)), permis
  *                   type: string
  */
 router.put("/:id", validateRequest((lang) => updatePermissionSchema(lang)), permissionController.updatePermission);
+
+/**
+ * @swagger
+ * /permissions/{id}:
+ *   delete:
+ *     summary: Delete permission by id
+ *     tags: [Permissions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Permission id
+ *     responses:
+ *       200:
+ *         description: Permission deleted successfully
+ */
+router.delete("/:id", validateRequest((lang) => deletePermissionSchema(lang)), permissionController.deletePermission);
 
 export default router;

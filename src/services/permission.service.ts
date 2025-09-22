@@ -85,4 +85,12 @@ export class PermissionService {
         })
     }
 
+    deletePermission = async (id: string) => {
+        return this.prisma.permission.delete({
+            where: {
+                id: id.toString(),
+            },
+        })
+    }
+
 }

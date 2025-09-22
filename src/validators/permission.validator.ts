@@ -36,3 +36,12 @@ export const updatePermissionSchema = (lang: keyof typeof validationMessages) =>
         }),
     });
 };
+
+export const deletePermissionSchema = (lang: keyof typeof validationMessages) => {
+    const t = validationMessages[lang] || validationMessages.vi;
+    return z.object({
+        params: z.object({
+            id: z.uuid({ message: t.invalidId }),
+        }),
+    });
+};
