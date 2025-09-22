@@ -7,6 +7,9 @@ export const validationMessages = {
         lastnameMax: "Tên không được dài quá 16 ký tự",
         phoneLength: "Số điện thoại phải có đúng 10 ký tự",
         phoneInvalid: "Số điện thoại chỉ được chứa số",
+        invalidId: "ID không hợp lệ",
+        invalidName: "Tên không hợp lệ",
+        invalidDescription: "Mô tả không hợp lệ",
     },
     en: {
         required: (field: string) => `${field} is required`,
@@ -16,5 +19,8 @@ export const validationMessages = {
         lastnameMax: "Lastname must be less than 16 characters",
         phoneLength: "Phone number must have exactly 10 digits",
         phoneInvalid: "Phone number must contain only digits",
+        invalidId: "Invalid ID",
+        invalidName: "Invalid name",
+        invalidDescription: "Invalid description",
     },
 } as const;

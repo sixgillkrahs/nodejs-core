@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodObject, ZodRawShape, ZodError } from "zod";
 import { ValidationError } from "@/utils/errorHandler";
+import { validationMessages } from "@/i18n/validationMessages";
 
 export const validateRequest =
-    (schemaFactory: (lang: string) => ZodObject<ZodRawShape>) =>
+    (schemaFactory: (lang: keyof typeof validationMessages) => ZodObject<ZodRawShape>) =>
         (req: Request, res: Response, next: NextFunction): void => {
             try {
                 const lang = req.cookies?.lang || req.headers["accept-language"]?.split(",")[0] || "vi";
@@ -24,7 +25,7 @@ export const validateRequest =
                         message: issue.message,
                     }));
 
-                    next(new ValidationError(JSON.stringify(errors)));
+                    next(new ValidationError(errors[0]?.message || "Validation failed"));
                     return;
                 }
 

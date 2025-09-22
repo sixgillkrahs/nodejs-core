@@ -15,6 +15,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { cache } from "./middleware/cacheMiddleware";
 import { notFoundHandler } from "./middleware/notFound";
 import userRoutes from '@/routes/user.routes'
+import permissionRoutes from "./routes/permission.routes";
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use(errorMiddleware);
 app.use("/api/users", cache({ duration: 300 }));
 app.use("/api/hero", heroRoutes)
 app.use("/monitoring", monitoringRoutes);
+app.use("/api/permissions", permissionRoutes);
 // Add this as the last middleware (before error handler)
 app.use(notFoundHandler);
 

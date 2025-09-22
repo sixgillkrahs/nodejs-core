@@ -23,7 +23,7 @@ model policy_permission {
   updatedBy    String?
 
   policy     policy    @relation(fields: [policyId], references: [id])
-  permisson  permisson @relation(fields: [permissionId], references: [id])
+  permission  permission @relation(fields: [permissionId], references: [id])
 }
 
 model passwordHistory {
@@ -39,8 +39,8 @@ model passwordHistory {
 
 model user {
   id        String   @id @default(uuid())
-  firstname String
-  lastname  String
+  firstName String
+  lastName  String
   phone     String
   email     String
   isActive  Boolean  @default(true)
@@ -80,7 +80,7 @@ model role {
   rolePolicies role_policy[]
 }
 
-model resouces {
+model resources {
   id        String   @id @default(uuid())
   name      String
   createdAr DateTime
@@ -89,18 +89,18 @@ model resouces {
   updatedBy  String?
   createdBy  String?
 
-  permissons permisson[]
+  permissions permission[]
 }
 
-model permisson {
+model permission {
   id          String   @id @default(uuid())
   name        String
   description String?
-  isActice    Boolean
+  isActive    Boolean
   resourceId  String
   operationId Int?
 
-  resouces  resouces  @relation(fields: [resourceId], references: [id])
+  resources  resources  @relation(fields: [resourceId], references: [id])
   operation operation? @relation(fields: [operationId], references: [id])
 
   policy_permissions policy_permission[]
@@ -115,7 +115,7 @@ model operation {
   updatedAt DateTime
   description String?
 
-  permissons permisson[]
+  permissions permission[]
 }
 
 model policy {
