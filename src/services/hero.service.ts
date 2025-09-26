@@ -1,6 +1,6 @@
 import { logger } from "@/config/logger";
 import { singleton } from "@/decorators/singleton";
-import { PrismaClient, Hero } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import uuid from 'uuid'
 
 
@@ -12,13 +12,7 @@ export class HeroService {
         this.prisma = new PrismaClient();
     }
 
-    createHero(data: Hero) {
-        try {
-            return this.prisma.hero.create({
-                data: data,
-            })
-        } catch (error) {
-            throw error
-        }
+    test() {
+        return "hello"
     }
 }

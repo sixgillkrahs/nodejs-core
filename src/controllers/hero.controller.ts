@@ -1,7 +1,6 @@
 import { HeroService } from "@/services/hero.service";
-import { BaseController } from "./base.controller";
-import { uuid } from "zod";
 import { NextFunction, Request, Response } from "express";
+import { BaseController } from "./base.controller";
 
 
 
@@ -11,23 +10,10 @@ export class HeroController extends BaseController {
         super()
     }
 
-    createHero(req: Request, res: Response, next: NextFunction) {
-        console.log(this)
-        try {
-            this.handleRequest(req, res, next, async () => {
-                const { id } = req.body as Hero
-                if (id) {
-
-                }
-                // const heroCreated = await this.heroService.createHero(req.body);
-                return {
-                    message: "Tạo thành công",
-                    data: req.body
-                }
-            })
-        } catch (error) {
-            throw error
-        }
+    test = (req: Request, res: Response, next: NextFunction) => {
+        this.handleRequest(req, res, next, async () => {
+            return this.heroService.test()
+        })
     }
 
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import "dotenv/config";
 
 const envSchema = z.object({
-    // MYSQL_DATABASE_URL: z.string(),
+    DATABASE_URL: z.string(),
     PORT: z
         .string()
         .transform(Number)

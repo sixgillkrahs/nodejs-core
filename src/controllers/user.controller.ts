@@ -15,10 +15,10 @@ export class UserController extends BaseController {
     createUser = (req: Request, res: Response, next: NextFunction) => {
         try {
             this.handleRequest(req, res, next, async () => {
-                const { image, firstname, lastname, email, phone } = req.body
+                const { image, firstName, lastName, email, phone } = req.body
                 const dataCreate: Optional<user, "id"> = {
-                    firstname,
-                    lastname,
+                    firstName,
+                    lastName,
                     isDeleted: false,
                     email,
                     image: image || "",

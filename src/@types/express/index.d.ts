@@ -8,6 +8,7 @@ declare global {
                 role: string;
             };
             requestId: string;
+            io: Server;
         }
     }
 }

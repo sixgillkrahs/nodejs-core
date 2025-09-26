@@ -14,24 +14,24 @@ const monitoringController = new HeroController(metricsService);
  *   description: System monitoring and health check endpoints
  */
 
-/**
- * @swagger
- * /hero/create:
- *   post:
- *     summary: Get system metrics
- *     tags: [Monitoring]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Prometheus metrics in text format
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *       401:
- *         description: Unauthorized
- */
-router.post("/create", monitoringController.createHero);
+// /**
+//  * @swagger
+//  * /hero/create:
+//  *   post:
+//  *     summary: Get system metrics
+//  *     tags: [Monitoring]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     responses:
+//  *       200:
+//  *         description: Prometheus metrics in text format
+//  *         content:
+//  *           text/plain:
+//  *             schema:
+//  *               type: string
+//  *       401:
+//  *         description: Unauthorized
+//  */
+// router.post("/create", monitoringController.createHero);
 
 export default router;
