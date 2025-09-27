@@ -2,6 +2,7 @@ import express, { ErrorRequestHandler } from "express";
 import { requestId } from "./middleware/requestId";
 import { setupSecurityHeaders } from "./middleware/securityHeaders";
 import cors from 'cors'
+import status from 'express-status-monitor'
 import { ENV } from "./config/env";
 import { compressionMiddleware } from "./middleware/performanceMiddleware";
 import { apiLimiter, authLimiter } from "./middleware/rateLimiter";
@@ -40,7 +41,7 @@ const setupMiddleware = (app: express.Application) => {
     app.use("/api/auth", authLimiter);
     app.use("/api", apiLimiter);
 };
-
+app.use(status())
 setupMiddleware(app);
 
 app.get("/health", (req, res) => {
@@ -56,6 +57,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/permissions", permissionRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/hero", heroRoutes)
+
+
 
 const swaggerOptions = {
     explorer: true,
